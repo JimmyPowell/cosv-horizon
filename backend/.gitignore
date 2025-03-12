@@ -1,0 +1,27 @@
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+logs/
+
+# Spring Boot
+spring-boot-*.pid
+
+# 敏感配置文件（包含实际密码和密钥）
+src/main/resources/application.yml
+src/main/resources/application-dev.yml
+src/main/resources/application-prod.yml
+
+# 其他文件
+.DS_Store 

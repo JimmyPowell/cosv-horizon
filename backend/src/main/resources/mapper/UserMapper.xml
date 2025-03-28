@@ -1,0 +1,63 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosv.horizon.mapper.UserMapper">
+    <!-- 更新用户密码 -->
+    <update id="updatePassword">
+        UPDATE user 
+        SET password = #{password}, 
+            update_date = #{updateDate} 
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 更新用户信息 -->
+    <update id="updateUserInfo" parameterType="com.cosv.horizon.entity.User">
+        UPDATE user
+        SET avatar = #{avatar},
+            company = #{company},
+            location = #{location},
+            git_hub = #{gitHub},
+            website = #{website},
+            free_text = #{freeText},
+            real_name = #{realName},
+            update_date = #{updateDate}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 插入新用户 -->
+    <insert id="insert" parameterType="com.cosv.horizon.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (
+            uuid, 
+            name, 
+            password, 
+            role, 
+            email, 
+            avatar, 
+            company, 
+            location, 
+            git_hub, 
+            status, 
+            rating, 
+            website, 
+            free_text, 
+            real_name, 
+            create_date, 
+            update_date
+        ) VALUES (
+            #{uuid}, 
+            #{name}, 
+            #{password}, 
+            #{role}, 
+            #{email}, 
+            #{avatar}, 
+            #{company}, 
+            #{location}, 
+            #{gitHub}, 
+            #{status}, 
+            #{rating}, 
+            #{website}, 
+            #{freeText}, 
+            #{realName}, 
+            #{createDate}, 
+            #{updateDate}
+        )
+    </insert>
+</mapper> 

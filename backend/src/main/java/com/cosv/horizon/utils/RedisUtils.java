@@ -17,16 +17,16 @@ import java.util.Map;
 @Component
 public class RedisUtils {
     
-    @Value("${spring.redis.host}")
+    @Value("${spring.data.redis.host}")
     private String redisHost;
     
-    @Value("${spring.redis.port}")
+    @Value("${spring.data.redis.port}")
     private int redisPort;
     
-    @Value("${spring.redis.password}")
+    @Value("${spring.data.redis.password}")
     private String redisPassword;
     
-    @Value("${spring.redis.timeout:2000}")
+    @Value("${spring.data.redis.timeout:2000}")
     private int redisTimeout;
     
     private static String server_address;

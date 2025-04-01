@@ -20,6 +20,6 @@ public class HomeController {
      */
     @GetMapping("/")
     public RedirectView home() {
-        return new RedirectView("/api/auth/login");
+        return new RedirectView("/login.html");
     }
 } 

@@ -5,16 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edcaa8b2-3b16-4c63-b0ad-8d764e4a7d78" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/../../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/OAuth2Controller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/OAuth2RedirectController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../logs/application.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../logs/application.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/OriginalLoginMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/OriginalLoginMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/GithubOauthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/OriginalLoginService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/src/main/resources/application.yml.template" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/resources/application.yml.template" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +56,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.Application.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/jimypowell/code/cosv/cosv-horizon/cosv-horizon/backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -101,6 +104,8 @@
       <updated>1742972330777</updated>
       <workItem from="1742972331820" duration="1478000" />
       <workItem from="1742987542798" duration="34000" />
+      <workItem from="1743487449501" duration="19000" />
+      <workItem from="1743487473180" duration="600000" />
     </task>
     <servers />
   </component>

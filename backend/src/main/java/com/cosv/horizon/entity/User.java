@@ -27,10 +27,4 @@ public class User {
     private String realName;      // 用户真实姓名
     private Date createDate;      // 创建日期，默认为当前时间
     private Date updateDate;      // 更新日期，自动更新
-    
-    // GitHub OAuth相关字段
-    private String githubId;      // GitHub账号唯一ID
-    private String githubLogin;   // GitHub登录名
-    private String githubToken;   // GitHub访问令牌
-
 }

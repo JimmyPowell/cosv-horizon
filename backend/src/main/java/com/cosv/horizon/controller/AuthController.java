@@ -35,7 +35,7 @@ import java.util.Map;
  * 处理用户注册、登录、令牌刷新和登出等认证相关功能
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -379,32 +379,6 @@ public class AuthController {
                 null,
                 "登出失败: " + e.getMessage()
             ));
-        }
-    }
-
-    /**
-     * 获取登录配置信息
-     * 返回OAuth2登录的相关配置
-     * @return 包含OAuth2配置的响应
-     */
-    @GetMapping("/login")
-    public ResponseEntity<Map<String, Object>> getLoginConfig() {
-        try {
-            Map<String, Object> response = new HashMap<>();
-            
-            Map<String, String> github = new HashMap<>();
-            github.put("authorizeUrl", "/api/oauth2/authorization/github");
-            
-            response.put("github", github);
-            response.put("baseUrl", "/api");
-            
-            logger.info("获取登录配置成功");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            logger.error("获取登录配置异常", e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "获取登录配置失败: " + e.getMessage());
-            return ResponseEntity.ok(errorResponse);
         }
     }
 }

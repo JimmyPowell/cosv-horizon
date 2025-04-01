@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosv.horizon.mapper.UserOrganizationLinkMapper">
+    
+    <!-- 基础列映射 -->
+    <resultMap id="userOrganizationLinkResultMap" type="com.cosv.horizon.entity.UserOrganizationLink">
+        <id property="id" column="id"/>
+        <result property="organizationId" column="organization_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="role" column="role"/>
+    </resultMap>
+    
+    <!-- 组织关联用户映射 -->
+    <resultMap id="organizationWithUserResultMap" type="com.cosv.horizon.entity.Organization">
+        <id property="id" column="org_id"/>
+        <result property="name" column="org_name"/>
+        <result property="status" column="org_status"/>
+        <result property="dateCreated" column="org_date_created"/>
+        <result property="avatar" column="org_avatar"/>
+        <result property="description" column="org_description"/>
+        <result property="rating" column="org_rating"/>
+        <result property="freeText" column="org_free_text"/>
+    </resultMap>
+    
+    <!-- 插入用户组织关联记录 -->
+    <insert id="insert" parameterType="com.cosv.horizon.entity.UserOrganizationLink" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO lnk_user_organization (
+            organization_id, user_id, role
+        ) VALUES (
+            #{organizationId}, #{userId}, #{role}
+        )
+    </insert>
+    
+    <!-- 更新用户在组织中的角色 -->
+    <update id="updateRole">
+        UPDATE lnk_user_organization
+        SET role = #{role}
+        WHERE organization_id = #{organizationId} AND user_id = #{userId}
+    </update>
+    
+    <!-- 删除用户组织关联 -->
+    <delete id="delete">
+        DELETE FROM lnk_user_organization
+        WHERE organization_id = #{organizationId} AND user_id = #{userId}
+    </delete>
+    
+    <!-- 删除组织的所有成员关联 -->
+    <delete id="deleteByOrganizationId">
+        DELETE FROM lnk_user_organization WHERE organization_id = #{organizationId}
+    </delete>
+    
+    <!-- 查询用户在组织中的角色 -->
+    <select id="findByOrganizationAndUser" resultMap="userOrganizationLinkResultMap">
+        SELECT * FROM lnk_user_organization
+        WHERE organization_id = #{organizationId} AND user_id = #{userId}
+    </select>
+    
+    <!-- 查询组织的所有成员 -->
+    <select id="findByOrganizationId" resultMap="userOrganizationLinkResultMap">
+        SELECT * FROM lnk_user_organization
+        WHERE organization_id = #{organizationId}
+    </select>
+    
+    <!-- 查询用户所属的所有组织ID -->
+    <select id="findOrganizationIdsByUserId" resultType="java.lang.Long">
+        SELECT organization_id FROM lnk_user_organization
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 查询用户所属的所有组织（带组织信息） -->
+    <select id="findOrganizationsByUserId" resultMap="organizationWithUserResultMap">
+        SELECT 
+            o.id as org_id,
+            o.name as org_name,
+            o.status as org_status,
+            o.date_created as org_date_created,
+            o.avatar as org_avatar,
+            o.description as org_description,
+            o.rating as org_rating,
+            o.free_text as org_free_text
+        FROM organization o
+        JOIN lnk_user_organization l ON o.id = l.organization_id
+        WHERE l.user_id = #{userId}
+    </select>
+    
+</mapper> 

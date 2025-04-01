@@ -179,3 +179,51 @@ CREATE INDEX idx_lnk_vulnerability_metadata_tag_compound ON lnk_vulnerability_me
 CREATE INDEX idx_lnk_vulnerability_metadata_user_vuln_id ON lnk_vulnerability_metadata_user(vulnerability_metadata_id); -- 漏洞用户-漏洞索引
 CREATE INDEX idx_lnk_vulnerability_metadata_user_user_id ON lnk_vulnerability_metadata_user(user_id); -- 漏洞用户-用户索引
 CREATE INDEX idx_lnk_vulnerability_metadata_user_compound ON lnk_vulnerability_metadata_user(vulnerability_metadata_id, user_id); -- 漏洞用户组合索引
+
+-- 通知表
+CREATE TABLE IF NOT EXISTS notification (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL COMMENT '通知类型',
+    target_id BIGINT COMMENT '目标对象ID',
+    user_id BIGINT NOT NULL COMMENT '接收者用户ID',
+    sender_id BIGINT COMMENT '发送者用户ID',
+    title VARCHAR(100) NOT NULL COMMENT '通知标题',
+    content TEXT NOT NULL COMMENT '通知内容',
+    is_read BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否已读',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    expire_time TIMESTAMP NULL COMMENT '过期时间',
+    action_url VARCHAR(255) COMMENT '操作链接',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '通知状态'
+) COMMENT='通知表';
+
+-- 创建通知表索引
+CREATE INDEX IF NOT EXISTS idx_notification_user_id ON notification(user_id);
+CREATE INDEX IF NOT EXISTS idx_notification_type ON notification(type);
+CREATE INDEX IF NOT EXISTS idx_notification_target_id ON notification(target_id);
+CREATE INDEX IF NOT EXISTS idx_notification_is_read ON notification(is_read);
+CREATE INDEX IF NOT EXISTS idx_notification_create_time ON notification(create_time);
+CREATE INDEX IF NOT EXISTS idx_notification_status ON notification(status);
+
+-- API密钥表
+CREATE TABLE IF NOT EXISTS api_key (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    key_prefix VARCHAR(10) NOT NULL COMMENT '密钥前缀，用于识别',
+    key_hash VARCHAR(64) NOT NULL UNIQUE COMMENT '密钥的SHA-256哈希值',
+    creator_user_id BIGINT NOT NULL COMMENT '创建密钥的用户ID',
+    organization_id BIGINT NULL COMMENT '关联的组织ID，NULL表示个人密钥(PAT)',
+    description VARCHAR(255) NULL COMMENT '用户提供的密钥描述',
+    scopes TEXT NULL COMMENT '授权范围列表，逗号分隔',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '密钥状态: ACTIVE, REVOKED, EXPIRED',
+    last_used_time TIMESTAMP NULL COMMENT '最后成功使用时间',
+    last_used_ip VARCHAR(45) NULL COMMENT '最后成功使用的IP地址',
+    expire_time TIMESTAMP NULL COMMENT '密钥过期时间，NULL表示永不过期',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间'
+) COMMENT='API密钥管理表';
+
+-- 创建API密钥表索引
+CREATE INDEX IF NOT EXISTS idx_apikey_prefix ON api_key(key_prefix);
+CREATE INDEX IF NOT EXISTS idx_apikey_creator ON api_key(creator_user_id);
+CREATE INDEX IF NOT EXISTS idx_apikey_organization ON api_key(organization_id);
+CREATE INDEX IF NOT EXISTS idx_apikey_status ON api_key(status);
+CREATE INDEX IF NOT EXISTS idx_apikey_expire_time ON api_key(expire_time);

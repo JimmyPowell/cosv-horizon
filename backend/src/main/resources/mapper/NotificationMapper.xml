@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosv.horizon.mapper.NotificationMapper">
+    <!-- 通知表的基本列 -->
+    <sql id="Base_Column_List">
+        id, type, target_id, user_id, sender_id, title, content, 
+        is_read, create_time, expire_time, action_url, status
+    </sql>
+
+    <!-- 插入通知 -->
+    <insert id="insert" parameterType="com.cosv.horizon.entity.Notification" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notification (
+            type, target_id, user_id, sender_id, title, content, 
+            is_read, create_time, expire_time, action_url, status
+        ) VALUES (
+            #{type}, #{targetId}, #{userId}, #{senderId}, #{title}, #{content}, 
+            #{isRead}, #{createTime}, #{expireTime}, #{actionUrl}, #{status}
+        )
+    </insert>
+
+    <!-- 批量插入通知 -->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notification (
+            type, target_id, user_id, sender_id, title, content, 
+            is_read, create_time, expire_time, action_url, status
+        ) VALUES 
+        <foreach collection="list" item="notification" separator=",">
+            (#{notification.type}, #{notification.targetId}, #{notification.userId}, 
+             #{notification.senderId}, #{notification.title}, #{notification.content}, 
+             #{notification.isRead}, #{notification.createTime}, #{notification.expireTime}, 
+             #{notification.actionUrl}, #{notification.status})
+        </foreach>
+    </insert>
+
+    <!-- 根据ID查询通知 -->
+    <select id="selectById" resultType="com.cosv.horizon.entity.Notification">
+        SELECT <include refid="Base_Column_List" />
+        FROM notification
+        WHERE id = #{id} AND status != 'DELETED'
+    </select>
+
+    <!-- 根据用户ID查询通知列表 -->
+    <select id="selectByUserId" resultType="com.cosv.horizon.entity.Notification">
+        SELECT <include refid="Base_Column_List" />
+        FROM notification
+        WHERE user_id = #{userId} AND status != 'DELETED'
+        ORDER BY create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 根据用户ID和通知类型查询通知列表 -->
+    <select id="selectByUserIdAndType" resultType="com.cosv.horizon.entity.Notification">
+        SELECT <include refid="Base_Column_List" />
+        FROM notification
+        WHERE user_id = #{userId} AND type = #{type} AND status != 'DELETED'
+        ORDER BY create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 查询用户的未读通知数量 -->
+    <select id="countUnreadByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE user_id = #{userId} AND is_read = 0 AND status != 'DELETED'
+    </select>
+
+    <!-- 标记通知为已读 -->
+    <update id="markAsRead">
+        UPDATE notification
+        SET is_read = 1
+        WHERE id = #{id} AND status != 'DELETED'
+    </update>
+
+    <!-- 批量标记通知为已读 -->
+    <update id="batchMarkAsRead">
+        UPDATE notification
+        SET is_read = 1
+        WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND status != 'DELETED'
+    </update>
+
+    <!-- 标记用户所有通知为已读 -->
+    <update id="markAllAsRead">
+        UPDATE notification
+        SET is_read = 1
+        WHERE user_id = #{userId} AND is_read = 0 AND status != 'DELETED'
+    </update>
+
+    <!-- 更新通知状态 -->
+    <update id="updateStatus">
+        UPDATE notification
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除通知（逻辑删除） -->
+    <update id="delete">
+        UPDATE notification
+        SET status = 'DELETED'
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据目标ID和类型查询通知 -->
+    <select id="selectByTargetIdAndType" resultType="com.cosv.horizon.entity.Notification">
+        SELECT <include refid="Base_Column_List" />
+        FROM notification
+        WHERE target_id = #{targetId} AND type = #{type} AND status != 'DELETED'
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 查询用户通知总数 -->
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE user_id = #{userId} AND status != 'DELETED'
+    </select>
+</mapper> 

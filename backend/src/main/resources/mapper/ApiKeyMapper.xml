@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosv.horizon.mapper.ApiKeyMapper">
+
+    <!-- 基础列映射 -->
+    <resultMap id="apiKeyResultMap" type="com.cosv.horizon.entity.ApiKey">
+        <id property="id" column="id"/>
+        <result property="keyPrefix" column="key_prefix"/>
+        <result property="keyHash" column="key_hash"/>
+        <result property="creatorUserId" column="creator_user_id"/>
+        <result property="organizationId" column="organization_id"/>
+        <result property="description" column="description"/>
+        <result property="scopes" column="scopes"/>
+        <result property="status" column="status"/>
+        <result property="lastUsedTime" column="last_used_time"/>
+        <result property="lastUsedIp" column="last_used_ip"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, key_prefix, key_hash, creator_user_id, organization_id, description, 
+        scopes, status, last_used_time, last_used_ip, expire_time, create_time, update_time
+    </sql>
+
+    <!-- 插入API密钥 -->
+    <insert id="insert" parameterType="com.cosv.horizon.entity.ApiKey" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO api_key (
+            key_prefix, key_hash, creator_user_id, organization_id, description, 
+            scopes, status, expire_time, create_time, update_time
+        ) VALUES (
+            #{keyPrefix}, #{keyHash}, #{creatorUserId}, #{organizationId}, #{description}, 
+            #{scopes}, #{status}, #{expireTime}, NOW(), NOW()
+        )
+    </insert>
+
+    <!-- 根据哈希值查询有效密钥 -->
+    <select id="findActiveByKeyHash" resultMap="apiKeyResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM api_key
+        WHERE key_hash = #{keyHash} AND status = 'ACTIVE'
+          AND (expire_time IS NULL OR expire_time > NOW())
+    </select>
+
+    <!-- 根据前缀查询密钥 -->
+    <select id="findByKeyPrefix" resultMap="apiKeyResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM api_key
+        WHERE key_prefix = #{keyPrefix}
+    </select>
+
+    <!-- 根据ID查询密钥 -->
+    <select id="findById" resultMap="apiKeyResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM api_key
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询用户创建的所有密钥 -->
+    <select id="findByCreatorUserId" resultMap="apiKeyResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM api_key
+        WHERE creator_user_id = #{creatorUserId} AND status != 'REVOKED'
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 查询组织的所有密钥 -->
+    <select id="findByOrganizationId" resultMap="apiKeyResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM api_key
+        WHERE organization_id = #{organizationId} AND status != 'REVOKED'
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 更新密钥状态 -->
+    <update id="updateStatus">
+        UPDATE api_key
+        SET status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新最后使用时间和IP -->
+    <update id="updateLastUsed">
+        UPDATE api_key
+        SET last_used_time = #{lastUsedTime},
+            last_used_ip = #{lastUsedIp},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除密钥（通过更新状态为REVOKED） -->
+    <update id="revokeById">
+        UPDATE api_key
+        SET status = 'REVOKED',
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量撤销密钥 -->
+    <update id="revokeByIds">
+        UPDATE api_key
+        SET status = 'REVOKED',
+            update_time = NOW()
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper> 

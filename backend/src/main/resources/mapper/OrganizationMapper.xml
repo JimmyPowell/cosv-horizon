@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosv.horizon.mapper.OrganizationMapper">
+    
+    <!-- 基础列映射 -->
+    <resultMap id="organizationResultMap" type="com.cosv.horizon.entity.Organization">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="status" column="status"/>
+        <result property="dateCreated" column="date_created"/>
+        <result property="avatar" column="avatar"/>
+        <result property="description" column="description"/>
+        <result property="rating" column="rating"/>
+        <result property="freeText" column="free_text"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="reviewDate" column="review_date"/>
+        <result property="reviewedBy" column="reviewed_by"/>
+    </resultMap>
+    
+    <!-- 插入新组织 -->
+    <insert id="insert" parameterType="com.cosv.horizon.entity.Organization" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO organization (
+            name, status, date_created, avatar, description, rating, free_text
+        ) VALUES (
+            #{name}, #{status}, #{dateCreated}, #{avatar}, #{description}, #{rating}, #{freeText}
+        )
+    </insert>
+    
+    <!-- 按ID查询组织 -->
+    <select id="findById" resultMap="organizationResultMap">
+        SELECT * FROM organization WHERE id = #{id}
+    </select>
+    
+    <!-- 按名称查询组织 -->
+    <select id="findByName" resultMap="organizationResultMap">
+        SELECT * FROM organization WHERE name = #{name}
+    </select>
+    
+    <!-- 更新组织基本信息 -->
+    <update id="update" parameterType="com.cosv.horizon.entity.Organization">
+        UPDATE organization
+        SET name = #{name},
+            avatar = #{avatar},
+            description = #{description},
+            free_text = #{freeText}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新组织状态 -->
+    <update id="updateStatus">
+        UPDATE organization
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除组织 -->
+    <delete id="delete">
+        DELETE FROM organization WHERE id = #{id}
+    </delete>
+    
+    <!-- 按状态查询组织列表 -->
+    <select id="findByStatus" resultMap="organizationResultMap">
+        SELECT * FROM organization WHERE status = #{status}
+    </select>
+    
+    <!-- 查询用户创建的组织数量（在指定时间之后） -->
+    <select id="countUserCreatedOrganizations" resultType="int">
+        SELECT COUNT(o.id)
+        FROM organization o
+        JOIN lnk_user_organization l ON o.id = l.organization_id
+        WHERE l.user_id = #{userId}
+        AND l.role = 'ADMIN'
+        AND o.date_created >= #{startTime}
+    </select>
+    
+    <!-- 添加审核结果信息 -->
+    <update id="addReviewInfo">
+        UPDATE organization
+        SET status = #{status},
+            reject_reason = #{rejectReason},
+            review_date = #{reviewDate},
+            reviewed_by = #{reviewedBy}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 查询所有活跃状态的组织 -->
+    <select id="findAllActiveOrganizations" resultMap="organizationResultMap">
+        SELECT * FROM organization WHERE status = 'ACTIVE'
+    </select>
+    
+</mapper> 

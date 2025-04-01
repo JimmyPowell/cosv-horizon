@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edcaa8b2-3b16-4c63-b0ad-8d764e4a7d78" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/../../backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/OAuth2Controller.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/controller/OAuth2RedirectController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/OriginalLoginMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/mapper/OriginalLoginMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/GithubOauthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/java/com/cosv/horizon/service/OriginalLoginService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/src/main/resources/application.yml.template" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/src/main/resources/application.yml.template" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="edcaa8b2-3b16-4c63-b0ad-8d764e4a7d78" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

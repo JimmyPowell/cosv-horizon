@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
             
             // 2. 检查邮箱是否已注册
             if (findByEmail(user.getEmail()) != null) {
-                logger.warn("注册失败：邮箱 {} 已注册", user.getEmail());
+                logger.warn("注册失败：邮箱 {} 已注册或已与第三方账号绑定", user.getEmail());
                 return false;
             }
             

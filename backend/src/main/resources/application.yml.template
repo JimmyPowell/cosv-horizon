@@ -1,6 +1,6 @@
 # 服务器配置
 server:
-  port: 8080
+  port: 8082
   servlet:
     context-path: /api
 
@@ -9,26 +9,51 @@ spring:
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:cosv_horizon}?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:your_password_here}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
   # Redis配置
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:}
-    database: 0
-    timeout: 2000
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 2000
+      # 连接池配置
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
   
   # 邮件配置
   mail:
     host: ${MAIL_HOST:smtp.example.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:your_email@example.com}
-    password: ${MAIL_PASSWORD:your_email_password}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    protocol: smtp
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.protocols: TLSv1.2
+      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+      mail.smtp.connectiontimeout: 10000
+      mail.smtp.timeout: 10000
+      mail.smtp.writetimeout: 10000
+      
+  # OAuth2客户端配置
+  security:
+    oauth2:
+      client:
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login
 
 # MyBatis配置
 mybatis:
@@ -39,7 +64,7 @@ mybatis:
 
 # JWT配置
 jwt:
-  secret: ${JWT_SECRET:change_me_in_production}
+  secret: ${JWT_SECRET:}
   expiration: 86400000  # 24小时
   header: Authorization
   prefix: Bearer 
@@ -52,10 +77,10 @@ file:
 # GitHub OAuth配置
 github:
   client:
-    id: ${GITHUB_CLIENT_ID:Ov23lifwAxy6dSKVAv1X}
-    secret: ${GITHUB_CLIENT_SECRET:1e28e69657bc2a34fbd989eb08e0ba133322f479}
+    id: ${GITHUB_CLIENT_ID:}
+    secret: ${GITHUB_CLIENT_SECRET:}
   redirect:
-    uri: ${GITHUB_REDIRECT_URI:http://localhost:8082/login/oauth2/code/github}
+    uri: ${GITHUB_REDIRECT_URI:http://localhost:8082/api/login/oauth2/code/github}
   api:
     authorization-uri: https://github.com/login/oauth/authorize
     token-uri: https://github.com/login/oauth/access_token
@@ -67,16 +92,17 @@ github:
 # 阿里云OSS配置
 aliyun:
   oss:
-    endpoint: ${OSS_ENDPOINT:your_oss_address}
-    accessKeyId: ${OSS_ACCESS_KEY:your_access_key_here}
-    accessKeySecret: ${OSS_ACCESS_SECRET:your_access_secret_here}
-    bucketName: ${OSS_BUCKET_NAME:your_bucket_name}
+    endpoint: ${OSS_ENDPOINT:}
+    accessKeyId: ${OSS_ACCESS_KEY:}
+    accessKeySecret: ${OSS_ACCESS_SECRET:}
+    bucketName: ${OSS_BUCKET_NAME:}
 
 # 日志配置
 logging:
   level:
     root: INFO
     com.cosv.horizon: DEBUG
-    org.springframework.security: INFO
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
   file:
     name: logs/application.log

@@ -244,7 +244,7 @@ public class AuthController {
                 return ResponseEntity.ok(new HttpResponseEntity(
                     Constans.EXIST_CODE,
                     null,
-                    "注册失败，可能用户名或邮箱已存在"
+                    "注册失败，邮箱已被注册或已与GitHub账号绑定"
                 ));
             }
         } catch (Exception e) {

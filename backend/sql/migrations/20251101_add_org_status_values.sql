@@ -1,0 +1,28 @@
+-- Migration: Add new organization status values (no schema change needed)
+-- Date: 2025-11-01
+--
+-- Context:
+--   The application enum OrganizationStatus now includes:
+--     ACTIVE, PENDING, REJECTED, SUSPENDED, BANNED, DISBANDED, DELETED
+--
+-- DB Impact:
+--   The `organization.status` column is VARCHAR(50) without a CHECK constraint.
+--   Therefore, adding new enum values requires NO DDL change.
+--
+-- Optional guidance (no-op by default):
+--   If you need to remap legacy rows, you may run UPDATEs like below
+--   (adapt to your business logic and backup before applying):
+--
+--   -- Example: mark certain suspended rows as banned based on reviewer fields
+--   -- UPDATE organization SET status = 'BANNED'
+--   -- WHERE status = 'SUSPENDED' AND reviewed_by IS NOT NULL;
+--
+--   -- Example: mark owner-disbanded rows
+--   -- UPDATE organization SET status = 'DISBANDED'
+--   -- WHERE status = 'SUSPENDED' AND reviewed_by IS NULL;
+--
+--   -- Example: for soft-deleted records (if you later introduce DELETED semantics)
+--   -- UPDATE organization SET status = 'DELETED' WHERE uuid IN (...);
+--
+-- This migration is intentionally empty to document the change.
+

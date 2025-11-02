@@ -1,0 +1,117 @@
+{
+  "id": "COSV-2025-000123",
+  "schema_version": "1.0.0",
+  "summary": "模板注入导致远程代码执行（示例）",
+  "details": "由于对用户输入未进行模板层面的严格限制，攻击者可以通过构造恶意表达式触发模板引擎执行任意代码，从而导致远程代码执行。",
+  "published": "2025-10-31T12:34:56Z",
+  "withdrawn": null,
+  "confirmed_type": "VULNERABILITY",
+
+  "database_specific": {
+    "category_code": "SEC_TEST",
+    "tag_codes": ["RCE", "XSS"],
+    "tag_names": ["SQL注入"],
+    "extra_notes": "此处演示平台扩展字段，可按需自定义"
+  },
+
+  "aliases": ["CVE-2025-12345", "GHSA-xxxx-yyyy-zzzz"],
+  "related": ["COSV-2025-000122"],
+  "references": [
+    { "type": "ADVISORY", "url": "https://example.com/security/advisories/COSV-2025-000123" },
+    { "type": "FIX", "url": "https://github.com/example/repo/pull/1234" },
+    { "type": "REPORT", "url": "https://github.com/example/repo/issues/1222" }
+  ],
+
+  "cwe_ids": ["CWE-94", "CWE-79"],
+  "cwe_names": [
+    "Improper Control of Generation of Code ('Code Injection')",
+    "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+  ],
+
+  "time_line": [
+    { "type": "DISCOVERED", "value": "2025-10-01T08:00:00Z" },
+    { "type": "REPORTED",   "value": "2025-10-05T12:00:00Z" },
+    { "type": "FIXED",       "value": "2025-10-20T09:30:00Z" },
+    { "type": "PUBLISHED",   "value": "2025-10-31T12:34:56Z" }
+  ],
+
+  "severity": [
+    {
+      "type": "CVSS_V3",
+      "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "level": "CRITICAL",
+      "score_num": 9.8
+    },
+    { "type": "CVSS_V2", "score": "AV:N/AC:L/Au:N/C:P/I:P/A:P", "level": "HIGH", "score_num": 7.5 }
+  ],
+
+  "affected": [
+    {
+      "pkg": {
+        "ecosystem": "Maven",
+        "name": "com.example:templater",
+        "purl": "pkg:maven/com.example/templater@1.2.0",
+        "language": "JAVA",
+        "repository": "https://github.com/example/templater",
+        "home_page": "https://example.com/templater",
+        "introduced_commits": ["8aa0f9c..."],
+        "fixed_commits": ["b17c4aa..."],
+        "edition": "community"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            { "introduced": "1.0.0" },
+            { "fixed": "1.2.3" }
+          ]
+        },
+        {
+          "type": "GIT",
+          "repo": "https://github.com/example/templater",
+          "events": [
+            { "introduced": "8aa0f9cb6b4b2f3b5d..." },
+            { "fixed": "b17c4aa9dc2bf1a9db..." }
+          ]
+        }
+      ],
+      "versions": ["1.0.0", "1.1.0", "1.2.0"],
+      "ecosystem_specific": { "artifact": "templater", "group": "com.example" },
+      "database_specific": { "note": "受影响范围含社区版不含企业版" }
+    },
+    {
+      "pkg": {
+        "ecosystem": "PyPI",
+        "name": "jinja2-like",
+        "purl": "pkg:pypi/jinja2-like@0.9.0",
+        "language": "PYTHON",
+        "repository": "https://github.com/example/jinja2-like"
+      },
+      "ranges": [
+        { "type": "ECOSYSTEM", "events": [ { "introduced": "0" }, { "fixed": "0.9.3" } ] }
+      ]
+    }
+  ],
+
+  "patch_details": [
+    {
+      "patch_url": "https://github.com/example/templater/commit/b17c4aa9...",
+      "issue_url": "https://github.com/example/templater/issues/1222",
+      "main_language": "JAVA",
+      "author": "alice",
+      "committer": "bob",
+      "branches": ["release-1.2"],
+      "tags": ["v1.2.3"]
+    }
+  ],
+
+  "contributors": [
+    { "org": "ExampleSec", "name": "Alice", "email": "alice@example.com", "contributions": "report, PoC" },
+    { "org": "ExampleCorp", "name": "Bob",   "email": "bob@example.com",   "contributions": "fix" }
+  ],
+
+  "credits": [
+    { "name": "Security Researcher", "contact": ["mailto:researcher@example.com"], "type": "finder" }
+  ]
+}
+

@@ -1,0 +1,11 @@
+# Root ignores
+BOOT-INF/
+*.log
+
+# Frontend
+frontend-new/node_modules/
+frontend-new/dist/
+
+# Docs large sample
+docs/go.json
+

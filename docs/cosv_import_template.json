@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "summary": "简要摘要（一句话）",
+  "details": "这里是详细描述，支持 Markdown\n\n- 影响范围\n- 触发条件\n- 修复建议",
+  "published": "2025-07-16T09:00:00Z",
+  "aliases": ["CVE-2025-12345"],
+  "related": [],
+  "references": [
+    { "type": "advisory", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-12345" },
+    { "type": "patch", "url": "https://github.com/org/repo/commit/abcdef" }
+  ],
+  "cwe_ids": ["CWE-444"],
+  "cwe_names": ["HTTP Request Smuggling"],
+  "time_line": [
+    { "type": "disclosed", "value": "2025-07-15T00:00:00Z" },
+    { "type": "fixed", "value": "2025-07-16T00:00:00Z" }
+  ],
+  "severity": [
+    { "type": "CVSS:3.1/BASE", "score": "AV:N/AC:L/...", "level": "HIGH", "score_num": 7.5 },
+    { "type": "CVSS:4.0", "score": "...", "level": "MEDIUM", "score_num": 6.3 }
+  ],
+  "affected": [
+    {
+      "pkg": {
+        "ecosystem": "PyPI",
+        "name": "aiohttp",
+        "purl": "pkg:pypi/aiohttp",
+        "language": "PYTHON",
+        "repository": "https://github.com/aio-libs/aiohttp",
+        "home_page": "https://pypi.org/project/aiohttp",
+        "introduced_commits": [],
+        "fixed_commits": []
+      },
+      "ranges": [
+        { "type": "SEMVER", "repo": "", "events": [ { "introduced": "3.12.0" }, { "fixed": "3.12.14" } ] }
+      ],
+      "versions": ["3.12.0", "3.12.1", "3.12.2"]
+    }
+  ],
+  "patch_details": [
+    { "patch_url": "https://github.com/aio-libs/aiohttp/commit/abcdef", "issue_url": "https://github.com/aio-libs/aiohttp/issues/123", "main_language": "Python", "author": "Alice", "committer": "Bob", "branches": ["main"], "tags": ["v3.12.14"] }
+  ],
+  "contributors": [ { "org": "CSPioneer", "name": "Jeppe", "email": "jeppe@example.com", "contributions": "Report and PoC" } ],
+  "credits": [ { "name": "Security Team", "type": "reporter", "contact": ["mailto:sec@example.com"] } ],
+  "exploit_status": ["exploited_in_the_wild"],
+  "database_specific": {}
+}
+

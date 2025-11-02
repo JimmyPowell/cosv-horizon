@@ -1,0 +1,132 @@
+{
+	"id": "string",
+	"aliases": [
+		"string"
+	],
+	"related": [
+		"string"
+	],
+	"schema_version": "string",
+	"cwe_ids": [
+		"string"
+	],
+	"cwe_names": [
+		"string"
+	],
+	"time_line": [
+		{
+			"type": "string",
+			"value": "string"
+		}
+	],
+	"summary": "string",
+	"details": "string",
+	"references": [
+		{
+			"type": "string",
+			"url": "string"
+		}
+	],
+	"published": "string",
+	"withdrawn": "string",
+	"modified": "string",
+	"severity": [
+		{
+			"type": "string",
+			"score": "string",
+			"level": "string",
+			"score_num": "string"
+		}
+	],
+	"affected": [
+		{
+			"package": {
+				"ecosystem": "string",
+				"name": "string",
+				"purl": "string",
+				"language": "string",
+				"repository": "string",
+				"introduced_commits": [
+					"string"
+				],
+				"fixed_commits": [
+					"string"
+				],
+				"home_page": "string",
+				"edition": "string"
+			},
+			"severity": [
+				{
+					"type": "string",
+					"score": "string"
+				}
+			],
+			"ranges": [
+				{
+					"type": "string",
+					"repo": "string",
+					"events": [
+						{
+							"introduced": "string",
+							"fixed": "string",
+							"last_affected": "string",
+							"limit": "string"
+						}
+					],
+					"database_specific": {
+						"see description"
+					}
+				}
+			],
+			"versions": [
+				"string"
+			],
+			"ecosystem_specific": {
+				"see description"
+			},
+			"database_specific": {
+				"see description"
+			}
+		}
+	],
+	"patch_details": [
+		{
+			"patch_url": "string",
+			"issue_url": "string",
+			"main_language": "string",
+			"author": "string",
+			"commiter": "string",
+			"branches": [
+				"string"
+			],
+			"tags": [
+				"string"
+			]
+		}
+	],
+	"exploit_status": [
+		"string"
+	],
+	"contributors": [
+		{
+			"org": "string",
+			"name": "string",
+			"email": "string",
+			"contributions": "string"
+		}
+	],
+	"confirmed_type": "string"
+	,
+	"credits": [
+		{
+			"name": "string",
+			"contact": [
+				"string"
+			],
+			"type": "string"
+		}
+	],
+	"database_specific": {
+		"see description"
+	}
+}

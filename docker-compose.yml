@@ -1,0 +1,59 @@
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:8.0
+    container_name: cosv_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-cosv_horizon}
+      MYSQL_USER: ${DB_USER:-cosv}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-changemeRoot}
+    ports:
+      - "3306:3306"
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p${DB_ROOT_PASSWORD:-changemeRoot} --silent"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: cosv_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_NAME:-cosv_horizon}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-cosv}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-changeme}
+      SECURITY_JWT_SECRET: ${JWT_SECRET:-please-change-me}
+      SPRING_MAIL_HOST: ${SMTP_HOST:-}
+      SPRING_MAIL_PORT: ${SMTP_PORT:-}
+      SPRING_MAIL_USERNAME: ${SMTP_USERNAME:-}
+      SPRING_MAIL_PASSWORD: ${SMTP_PASSWORD:-}
+      SEARCH_ES_ENABLED: 'false'
+    expose:
+      - "8080"
+
+  web:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: frontend-new/Dockerfile
+    container_name: cosv_web
+    depends_on:
+      - backend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+
+volumes:
+  db_data:

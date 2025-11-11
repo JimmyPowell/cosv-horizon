@@ -1,5 +1,5 @@
 ## Frontend Dockerfile (build + nginx serve + API proxy)
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY frontend-new/package*.json ./
 RUN npm ci
@@ -11,4 +11,3 @@ COPY frontend-new/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist/ /usr/share/nginx/html/
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -q -O- http://127.0.0.1/ >/dev/null || exit 1
-

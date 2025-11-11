@@ -268,29 +268,32 @@ public class OAuthController {
         }
         String email = resolveGithubEmail(gh);
 
-        User user = new User();
-        user.setUuid(UUID.randomUUID().toString());
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(null); // 第三方用户无本地密码
-        user.setRole(UserRole.USER);
-        user.setStatus(UserStatus.ACTIVE);
-        user.setAvatar(gh.getAvatar());
-        user.setCompany(gh.getCompany());
-        user.setLocation(gh.getLocation());
-        user.setWebsite(gh.getBlog());
-        user.setRealName(gh.getNickname());
-        user.setGitHub(gh.getUsername() != null ? "https://github.com/" + gh.getUsername() : null);
-        userMapper.insert(user);
+        // Hold a short MySQL named lock via UserService to serialize first-admin decision
+        return userService.withFirstUserLock(() -> {
+            User user = new User();
+            user.setUuid(UUID.randomUUID().toString());
+            user.setName(name);
+            user.setEmail(email);
+            user.setPassword(null); // 第三方用户无本地密码
+            user.setRole(userService.determineInitialRoleUnderLock());
+            user.setStatus(UserStatus.ACTIVE);
+            user.setAvatar(gh.getAvatar());
+            user.setCompany(gh.getCompany());
+            user.setLocation(gh.getLocation());
+            user.setWebsite(gh.getBlog());
+            user.setRealName(gh.getNickname());
+            user.setGitHub(gh.getUsername() != null ? "https://github.com/" + gh.getUsername() : null);
+            userMapper.insert(user);
 
-        OriginalLogin ol = new OriginalLogin();
-        ol.setUuid(UUID.randomUUID().toString());
-        ol.setUserId(user.getId());
-        ol.setSource("GITHUB");
-        ol.setName(ghLogin);
-        originalLoginMapper.insert(ol);
+            OriginalLogin ol = new OriginalLogin();
+            ol.setUuid(UUID.randomUUID().toString());
+            ol.setUserId(user.getId());
+            ol.setSource("GITHUB");
+            ol.setName(ghLogin);
+            originalLoginMapper.insert(ol);
 
-        return userMapper.findByUuid(user.getUuid());
+            return userMapper.findByUuid(user.getUuid());
+        });
     }
 
     private void tryUpgradeEmail(User user, String newEmail) {

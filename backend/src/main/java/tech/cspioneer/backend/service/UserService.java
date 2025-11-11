@@ -1,5 +1,6 @@
 package tech.cspioneer.backend.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,11 @@ public class UserService {
     private final UserMapper userMapper;
     private final VulnerabilityMetadataMapper vulnerabilityMetadataMapper;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${registration.first-user-admin:true}")
+    private boolean firstUserAdmin;
+
+    private static final String FIRST_USER_LOCK_KEY = "first_user_admin";
 
     public UserService(UserMapper userMapper,
                       VulnerabilityMetadataMapper vulnerabilityMetadataMapper,
@@ -55,24 +61,61 @@ public class UserService {
         if (userMapper.findByName(username) != null) {
             throw new ApiException(1006, "用户名已被占用");
         }
-        User user = new User();
-        user.setUuid(UUID.randomUUID().toString());
-        user.setEmail(email);
-        user.setName(username);
-        user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setRole(UserRole.USER);
-        user.setStatus(UserStatus.ACTIVE);
-        user.setRealName(realName);
-        user.setCompany(company);
-        user.setLocation(location);
-        int rows = userMapper.insert(user);
-        if (rows != 1) {
-            throw new ApiException(1500, "创建用户失败");
+
+        return withFirstUserLock(() -> {
+            User user = new User();
+            user.setUuid(UUID.randomUUID().toString());
+            user.setEmail(email);
+            user.setName(username);
+            user.setPassword(passwordEncoder.encode(rawPassword));
+            user.setRole(determineInitialRoleUnderLock());
+            user.setStatus(UserStatus.ACTIVE);
+            user.setRealName(realName);
+            user.setCompany(company);
+            user.setLocation(location);
+            int rows = userMapper.insert(user);
+            if (rows != 1) {
+                throw new ApiException(1500, "创建用户失败");
+            }
+            User saved = userMapper.findByUuid(user.getUuid());
+            if (saved != null) saved.setPassword(null);
+            return saved;
+        });
+    }
+
+    /**
+     * Determine initial role when creating a user, must be called while holding the first-user lock
+     * to avoid race conditions that could yield multiple admins.
+     */
+    public UserRole determineInitialRoleUnderLock() {
+        if (firstUserAdmin && userMapper.countAll() == 0) {
+            return UserRole.ADMIN;
         }
-        // 读取数据库回填默认时间等字段
-        User saved = userMapper.findByUuid(user.getUuid());
-        if (saved != null) saved.setPassword(null);
-        return saved;
+        return UserRole.USER;
+    }
+
+    /**
+     * Execute an action under a MySQL named lock to serialize the first-user-admin grant decision.
+     * If the lock cannot be obtained within timeout, we proceed without lock to avoid total failure,
+     * accepting an extremely low risk of race.
+     */
+    public <T> T withFirstUserLock(java.util.function.Supplier<T> action) {
+        boolean lockHeld = false;
+        if (firstUserAdmin) {
+            try {
+                Integer ok = userMapper.getLock(FIRST_USER_LOCK_KEY, 10);
+                lockHeld = (ok != null && ok == 1);
+            } catch (Exception ignored) {
+                // proceed without lock
+            }
+        }
+        try {
+            return action.get();
+        } finally {
+            if (lockHeld) {
+                try { userMapper.releaseLock(FIRST_USER_LOCK_KEY); } catch (Exception ignored) {}
+            }
+        }
     }
 
     public boolean verifyPassword(User user, String rawPassword) {

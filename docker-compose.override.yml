@@ -19,6 +19,9 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_DATABASE: 0
 
+      # First user admin toggle (default true). Set to false after first admin is created.
+      REGISTRATION_FIRST_USER_ADMIN: ${REGISTRATION_FIRST_USER_ADMIN:-true}
+
       # SMTP (465 SSL). Fill SMTP_* in .env. Set MAIL_MOCK=false to actually send emails.
       SPRING_MAIL_HOST: ${SMTP_HOST:-}
       SPRING_MAIL_PORT: ${SMTP_PORT:-465}

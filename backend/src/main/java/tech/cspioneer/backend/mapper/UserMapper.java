@@ -119,4 +119,11 @@ public interface UserMapper {
 
     @Select("SELECT COUNT(1) + 1 FROM `user` WHERE rating > #{rating}")
     long rankByRating(@Param("rating") long rating);
+
+    // Optional: MySQL named lock helpers to serialize first-user admin grant
+    @Select("SELECT GET_LOCK(#{name}, #{timeout})")
+    Integer getLock(@Param("name") String name, @Param("timeout") int timeout);
+
+    @Select("SELECT RELEASE_LOCK(#{name})")
+    Integer releaseLock(@Param("name") String name);
 }

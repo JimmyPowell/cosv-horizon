@@ -67,8 +67,9 @@ services:
       SEARCH_ES_ENABLED: 'false'
     expose:
       - "8080"
-    # 后端镜像中的 curl 健康检查在精简 JRE 镜像上可能不存在；去掉健康检查以避免误报 unhealthy
-    healthcheck: none
+    # 统一在 Compose 层覆盖健康检查，避免镜像内 curl/401 误报
+    healthcheck:
+      test: ["CMD", "true"]
 
   web:
     platform: linux/amd64

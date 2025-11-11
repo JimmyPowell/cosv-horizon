@@ -19,6 +19,21 @@ services:
       retries: 30
     volumes:
       - db_data:/var/lib/mysql
+      # 初始化数据库（首次启动且数据卷为空时自动执行）
+      - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+  redis:
+    platform: linux/amd64
+    image: redis:7-alpine
+    container_name: cosv_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
 
   backend:
     platform: linux/amd64
@@ -30,6 +45,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_NAME:-cosv_horizon}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
       SPRING_DATASOURCE_USERNAME: ${DB_USER:-cosv}
@@ -39,6 +56,10 @@ services:
       SPRING_MAIL_PORT: ${SMTP_PORT:-}
       SPRING_MAIL_USERNAME: ${SMTP_USERNAME:-}
       SPRING_MAIL_PASSWORD: ${SMTP_PASSWORD:-}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_DATABASE: 0
+      SEARCH_ENGINE: sql
       SEARCH_ES_ENABLED: 'false'
     expose:
       - "8080"

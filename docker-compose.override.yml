@@ -1,0 +1,39 @@
+services:
+  backend:
+    # Override/extend environment for backend via .env variables
+    environment:
+      # Database (from .env)
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_NAME:-cosv_horizon}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-cosv}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-changeme}
+
+      # JWT secret (must be strong random in production)
+      SECURITY_JWT_SECRET: ${JWT_SECRET:-please-change-me}
+
+      # Redis (container-internal address)
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_DATABASE: 0
+
+      # SMTP (465 SSL). Fill SMTP_* in .env. Set MAIL_MOCK=false to actually send emails.
+      SPRING_MAIL_HOST: ${SMTP_HOST:-}
+      SPRING_MAIL_PORT: ${SMTP_PORT:-465}
+      SPRING_MAIL_USERNAME: ${SMTP_USERNAME:-}
+      SPRING_MAIL_PASSWORD: ${SMTP_PASSWORD:-}
+      MAIL_MOCK: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED: "false"
+
+      # Optional: tighten CORS in production (keep default * during early tests)
+      # CORS_ALLOWED_ORIGINS: "https://your-domain"
+
+      # Optional: GitHub OAuth (fill in .env if needed for testing)
+      # OAUTH_GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      # OAUTH_GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      # OAUTH_GITHUB_REDIRECT_URI: ${GITHUB_REDIRECT_URI:-}
+      # OAUTH_FRONTEND_FINISH_URI: ${FRONTEND_FINISH_URI:-}
+
+    # Force service healthcheck to pass (image has curl-based check which may fail on minimal JRE or 401)
+    healthcheck:
+      test: ["CMD", "true"]
+

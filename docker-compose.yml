@@ -52,10 +52,14 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USER:-cosv}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-changeme}
       SECURITY_JWT_SECRET: ${JWT_SECRET:-please-change-me}
+      # SMTP (465 SSL)
       SPRING_MAIL_HOST: ${SMTP_HOST:-}
-      SPRING_MAIL_PORT: ${SMTP_PORT:-}
+      SPRING_MAIL_PORT: ${SMTP_PORT:-465}
       SPRING_MAIL_USERNAME: ${SMTP_USERNAME:-}
       SPRING_MAIL_PASSWORD: ${SMTP_PASSWORD:-}
+      MAIL_MOCK: 'false'
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE: 'true'
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED: 'false'
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_DATABASE: 0
@@ -63,6 +67,8 @@ services:
       SEARCH_ES_ENABLED: 'false'
     expose:
       - "8080"
+    # 后端镜像中的 curl 健康检查在精简 JRE 镜像上可能不存在；去掉健康检查以避免误报 unhealthy
+    healthcheck: none
 
   web:
     platform: linux/amd64

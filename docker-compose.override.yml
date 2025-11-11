@@ -14,6 +14,10 @@ services:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_DATABASE: 0
+      # Spring Data Redis (Boot 3.5 uses spring.data.redis.* for Lettuce configuration)
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_DATABASE: 0
 
       # SMTP (465 SSL). Fill SMTP_* in .env. Set MAIL_MOCK=false to actually send emails.
       SPRING_MAIL_HOST: ${SMTP_HOST:-}
@@ -36,4 +40,3 @@ services:
     # Force service healthcheck to pass (image has curl-based check which may fail on minimal JRE or 401)
     healthcheck:
       test: ["CMD", "true"]
-

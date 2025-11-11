@@ -268,12 +268,17 @@ public class OAuthController {
         }
         String email = resolveGithubEmail(gh);
 
+        // 复制到 effectively final 变量，供 lambda 使用
+        final String finalName = name;
+        final String finalGhLogin = ghLogin;
+        final String finalEmail = email;
+
         // Hold a short MySQL named lock via UserService to serialize first-admin decision
         return userService.withFirstUserLock(() -> {
             User user = new User();
             user.setUuid(UUID.randomUUID().toString());
-            user.setName(name);
-            user.setEmail(email);
+            user.setName(finalName);
+            user.setEmail(finalEmail);
             user.setPassword(null); // 第三方用户无本地密码
             user.setRole(userService.determineInitialRoleUnderLock());
             user.setStatus(UserStatus.ACTIVE);
@@ -289,7 +294,7 @@ public class OAuthController {
             ol.setUuid(UUID.randomUUID().toString());
             ol.setUserId(user.getId());
             ol.setSource("GITHUB");
-            ol.setName(ghLogin);
+            ol.setName(finalGhLogin);
             originalLoginMapper.insert(ol);
 
             return userMapper.findByUuid(user.getUuid());

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,9 @@ public class AuthController {
     private final PasswordResetSessionService pwdSessionService;
     private final TokenRevocationService tokenRevocationService;
 
+    @Value("${auth.local.enabled:false}")
+    private boolean localAuthEnabled;
+
     public AuthController(VerificationCodeService codeService,
                           RegistrationSessionService regSessionService,
                           EmailService emailService,
@@ -59,6 +63,17 @@ public class AuthController {
         this.tokenRevocationService = tokenRevocationService;
     }
 
+    /**
+     * Guard for email/password based flows when local auth is disabled.
+     * In GitHub-only mode, all /auth/register and /auth/password and /auth/login endpoints
+     * should return a clear error instead of silently failing.
+     */
+    private void ensureLocalAuthEnabled() {
+        if (!localAuthEnabled) {
+            throw new ApiException(1001, "当前环境已禁用邮箱密码登录与注册，请使用 GitHub 登录");
+        }
+    }
+
     public static class RequestCodeReq {
         @NotBlank @Email public String email;
     }
@@ -66,6 +81,7 @@ public class AuthController {
     @PostMapping("/register/request-code")
     @Operation(summary = "注册-请求验证码")
     public ApiResponse<Map<String, Object>> requestCode(@Valid @RequestBody RequestCodeReq req, HttpServletRequest httpReq) {
+        ensureLocalAuthEnabled();
         String ip = clientIp(httpReq);
         if (!rateLimiterService.allowIp(ip) || !rateLimiterService.allowEmail(req.email)) {
             throw new ApiException(1007, "请求过于频繁，请稍后再试");
@@ -86,6 +102,7 @@ public class AuthController {
     @PostMapping("/register/verify-code")
     @Operation(summary = "注册-验证验证码，发放注册会话")
     public ApiResponse<Map<String, Object>> verifyCode(@Valid @RequestBody VerifyCodeReq req) {
+        ensureLocalAuthEnabled();
         boolean ok = codeService.verifyAndConsume(req.email, req.code, req.requestId);
         if (!ok) throw new ApiException(1002, "验证码无效或已过期");
         String regSession = regSessionService.createSession(req.email);
@@ -106,6 +123,7 @@ public class AuthController {
     @PostMapping("/register/complete")
     @Operation(summary = "注册-完成用户创建（不返回token）")
     public ApiResponse<Map<String, Object>> complete(@Valid @RequestBody CompleteReq req) {
+        ensureLocalAuthEnabled();
         String email = regSessionService.consumeSession(req.regSession);
         if (email == null) throw new ApiException(1003, "注册会话无效或已过期");
         User user = userService.registerUser(email, req.username, req.password, req.realName, req.company, req.location);
@@ -122,6 +140,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "登录，返回用户信息与双token")
     public ApiResponse<Map<String, Object>> login(@Valid @RequestBody LoginReq req) {
+        ensureLocalAuthEnabled();
         User user = userService.findByLogin(req.login);
         if (user == null || !userService.verifyPassword(user, req.password)) {
             throw new ApiException(1004, "账号或密码错误");
@@ -203,6 +222,7 @@ public class AuthController {
     @PostMapping("/password/request-code")
     @Operation(summary = "重置密码-请求验证码")
     public ApiResponse<Map<String, Object>> passwordRequestCode(@Valid @RequestBody PwdRequestCodeReq req, HttpServletRequest httpReq) {
+        ensureLocalAuthEnabled();
         String ip = clientIp(httpReq);
         if (!rateLimiterService.allowIp(ip) || !rateLimiterService.allowEmail(req.email)) {
             throw new ApiException(1007, "请求过于频繁，请稍后再试");
@@ -231,6 +251,7 @@ public class AuthController {
     @PostMapping("/password/verify-code")
     @Operation(summary = "重置密码-验证验证码，发放重置会话")
     public ApiResponse<Map<String, Object>> passwordVerifyCode(@Valid @RequestBody PwdVerifyCodeReq req) {
+        ensureLocalAuthEnabled();
         boolean ok = pwdCodeService.verifyAndConsume(req.email, req.code, req.requestId);
         if (!ok) throw new ApiException(1002, "验证码无效或已过期");
         String resetSession = pwdSessionService.createSession(req.email);
@@ -247,6 +268,7 @@ public class AuthController {
     @PostMapping("/password/reset")
     @Operation(summary = "重置密码-提交新密码（全量吊销旧token）")
     public ApiResponse<Void> passwordReset(@Valid @RequestBody PwdResetReq req) {
+        ensureLocalAuthEnabled();
         String email = pwdSessionService.consumeSession(req.resetSession);
         if (email == null) throw new ApiException(1003, "重置会话无效或已过期");
 

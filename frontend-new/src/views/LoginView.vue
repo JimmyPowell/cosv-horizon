@@ -18,54 +18,10 @@
         </v-alert>
 
         <div class="login-form">
-          <!-- 邮箱密码登录表单 -->
-          <form @submit.prevent="handleLogin">
-            <div class="input-group mb-6">
-              <label class="input-label">邮箱</label>
-              <div class="input-wrapper">
-                <input 
-                  v-model="email"
-                  type="email"
-                  class="custom-input"
-                  placeholder=""
-                />
-              </div>
-            </div>
-            
-            <div class="input-group mb-2">
-              <label class="input-label">密码</label>
-              <div class="input-wrapper">
-                <input 
-                  v-model="password"
-                  type="password"
-                  class="custom-input"
-                  placeholder=""
-                />
-              </div>
-            </div>
-            
-            <div class="d-flex justify-end mb-6">
-              <router-link to="/forgot-password" class="text-decoration-none text-grey-darken-1">忘记密码？</router-link>
-            </div>
-            
-            <v-btn
-              :loading="loading"
-              :disabled="loading"
-              block
-              color="primary"
-              size="x-large"
-              type="submit"
-              class="mb-6"
-            >
-              登录
-            </v-btn>
-          </form>
-          
-          <!-- 分隔线 -->
-          <div class="divider mb-6">
-            <span class="divider-text">或</span>
-          </div>
-          
+          <p class="mb-6 text-body-2 text-grey-darken-1">
+            当前环境已禁用邮箱密码登录，请使用 GitHub 授权登录。
+          </p>
+
           <!-- GitHub 登录按钮 -->
           <v-btn
             block
@@ -77,12 +33,6 @@
             <v-icon left class="mr-2">mdi-github</v-icon>
             GITHUB 授权登录
           </v-btn>
-          
-          <!-- 注册链接 -->
-          <div class="text-center mt-6">
-            <span class="text-grey-darken-1">还没有账号？</span>
-            <router-link to="/register" class="text-decoration-none ml-2">立即注册</router-link>
-          </div>
         </div>
       </div>
     </transition>

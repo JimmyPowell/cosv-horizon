@@ -5,6 +5,16 @@
         <v-icon start>mdi-information-outline</v-icon>
         查看 COSV 模板说明
       </v-btn>
+      <v-btn
+        variant="text"
+        color="primary"
+        :href="templateDownloadUrl"
+        download="cosv_import_template.json"
+        class="ml-2"
+      >
+        <v-icon start>mdi-download</v-icon>
+        下载 COSV 模板
+      </v-btn>
     </div>
 
     <!-- Upload & metadata (lighter, button-trigger file select) -->
@@ -157,6 +167,8 @@ const selectedFileName = ref('');
 const uploading = ref(false);
 const rawFileUuid = ref('');
 const openTemplateInfo = ref(false);
+
+const templateDownloadUrl = `${import.meta.env.BASE_URL}cosv_import_template.json`;
 
 // metadata
 const languageOptions = [

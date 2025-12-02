@@ -18,7 +18,6 @@
         <v-card class="elevation-2">
           <v-tabs v-model="tab" color="primary" bg-color="white">
             <v-tab value="info">基本信息</v-tab>
-            <v-tab value="password" :disabled="!canChangePassword">修改密码</v-tab>
           </v-tabs>
           <v-card-text class="pa-6 form-content">
             <v-window v-model="tab">
@@ -106,20 +105,6 @@
                     <v-btn type="submit" color="primary" :loading="loading" class="mr-4">保存更改</v-btn>
                     <v-btn @click="cancelEdit" variant="outlined">取消</v-btn>
                   </div>
-                </v-form>
-              </v-window-item>
-              <v-window-item value="password">
-                <v-alert v-if="!canChangePassword" type="info" variant="tonal" class="mb-4">
-                  当前账号未绑定可用邮箱，无法通过邮箱验证码设置/修改密码。
-                </v-alert>
-                <v-form v-else @submit.prevent="handleChangePassword" class="mt-0">
-                  <v-text-field v-model="passwordData.newPassword" label="新密码" type="password" variant="outlined" class="mb-4 mt-0"></v-text-field>
-                  <v-text-field v-model="passwordData.confirmPassword" label="确认新密码" type="password" variant="outlined" class="mb-4"></v-text-field>
-                  <div class="d-flex align-center mb-4">
-                    <v-text-field v-model="passwordData.code" label="邮箱验证码" variant="outlined" class="mr-4"></v-text-field>
-                    <v-btn color="primary" variant="outlined" @click="sendPasswordCode" :loading="loading">发送验证码</v-btn>
-                  </div>
-                  <v-btn type="submit" color="primary" :loading="loading">提交修改</v-btn>
                 </v-form>
               </v-window-item>
             </v-window>

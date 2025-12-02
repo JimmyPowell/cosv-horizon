@@ -18,7 +18,6 @@
           <v-btn variant="text" class="nav-link hidden-sm-and-down" to="/#about">关于我们</v-btn>
           <v-btn variant="text" class="nav-link hidden-sm-and-down" to="/#contact">联系我们</v-btn>
           <v-btn variant="text" class="nav-link" to="/login">登录</v-btn>
-          <v-btn color="primary" variant="flat" class="ml-2" to="/register">注册</v-btn>
         </template>
 
         <!-- Logged In State -->

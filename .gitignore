@@ -2,10 +2,13 @@
 BOOT-INF/
 *.log
 
+# Local configuration (do not commit secrets)
+.env
+backend/src/main/resources/application.properties
+
 # Frontend
 frontend-new/node_modules/
 frontend-new/dist/
 
 # Docs large sample
 docs/go.json
-

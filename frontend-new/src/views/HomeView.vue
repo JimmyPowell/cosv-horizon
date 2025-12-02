@@ -58,9 +58,9 @@
       <v-container>
         <v-row align="center">
           <v-col cols="12" md="6">
-            <h2 class="text-h4 font-weight-bold mb-6">为什么选择 VulnScope？</h2>
+            <h2 class="text-h4 font-weight-bold mb-6">为什么选择 cosv-horizon？</h2>
             <p class="text-body-1 text-grey-darken-1 mb-8" style="line-height: 1.8;">
-              VulnScope 是一个专业的软件系统漏洞数据收集与展示平台，致力于为企业和安全研究人员提供最全面、最及时的漏洞情报服务。
+              cosv-horizon 是一个专业的软件系统漏洞数据收集与展示平台，致力于为企业和安全研究人员提供最全面、最及时的漏洞情报服务。
             </p>
             <div class="space-y-4">
               <div v-for="item in aboutItems" :key="item.title" class="d-flex align-start">
@@ -110,7 +110,7 @@
           <v-col cols="12" md="6">
             <div class="d-flex align-center mb-4">
               <v-icon color="blue-lighten-2" size="32" class="mr-2">mdi-shield-check</v-icon>
-              <span class="text-h5 font-weight-bold">VulnScope</span>
+              <span class="text-h5 font-weight-bold">cosv-horizon</span>
             </div>
             <p class="text-grey-lighten-1" style="max-width: 400px;">
               专业的软件系统漏洞数据收集与展示平台，为您的网络安全保驾护航。
@@ -135,7 +135,7 @@
         </v-row>
         <v-divider class="my-8"></v-divider>
         <div class="text-center text-grey-darken-1">
-          © 2024 VulnScope. 保留所有权利。
+          © 2025 cosv-horizon. 保留所有权利。
         </div>
       </v-container>
     </footer>
@@ -162,7 +162,7 @@ const aboutItems = ref([
 ]);
 
 const aboutCards = ref([
-    { title: 'CVE-2024', description: '最新漏洞', color: 'text-blue' },
+    { title: 'CVE-2025', description: '最新漏洞', color: 'text-blue' },
     { title: '高危', description: '风险等级', color: 'text-red' },
     { title: '已修复', description: '状态更新', color: 'text-green' },
     { title: '分析中', description: '处理进度', color: 'text-purple' },
